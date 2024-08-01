@@ -33,11 +33,22 @@ public class SecurityConfig {
         http.csrf(CsrfConfigurer::disable)
                 .authorizeHttpRequests(
                         requests -> requests
+                                 // Permit all for authentication endpoints and public blog post access
                                 .requestMatchers(antMatcher(HttpMethod.POST, "/api/v1/auth/**"),
-                                        antMatcher(HttpMethod.GET, "/api/v1/**"))
-                                .permitAll()
-                                .anyRequest()
-                                .permitAll()
+                                        antMatcher(HttpMethod.GET, "/api/v1/**")).permitAll()
+                                // Permit all for Swagger UI and API documentation
+                                .requestMatchers(antMatcher(HttpMethod.GET, "/swagger-ui.html"),
+                                        antMatcher(HttpMethod.GET, "/swagger-ui/**"),
+                                        antMatcher(HttpMethod.GET, "/v3/api-docs/**"),
+                                        antMatcher(HttpMethod.GET, "/swagger-resources/**")).permitAll()
+                                // Open access for user registration
+                                .requestMatchers(HttpMethod.POST, "/api/v1/users/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users/**").permitAll()
+                                // Restrict access for blog post management
+                                .requestMatchers("/api/v1/author-requests/approve/**", "/api/v1/author-requests/reject/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/author-requests/request").hasRole("REGISTERED_USER")
+                                .requestMatchers("/api/v1/posts/**").hasAnyRole("AUTHOR", "ADMIN")
+                                .anyRequest().authenticated()
 
                 )
                 .exceptionHandling(exception-> exception
