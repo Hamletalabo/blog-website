@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hamlet.blogwebsite.entity.enums.Roles;
 
 @Data
 @AllArgsConstructor
@@ -19,4 +20,5 @@ public class AuthRequest {
     private String email;
     private String password;
     private String confirmPassword;
+    private Roles roles;
 }
