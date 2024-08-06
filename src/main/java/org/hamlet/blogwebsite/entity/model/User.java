@@ -1,6 +1,7 @@
 package org.hamlet.blogwebsite.entity.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,8 @@ public class User extends BaseClass implements UserDetails {
     private String password;
     private String confirmPassword;
 
+    private boolean enabled;
+
 
     @OneToMany(mappedBy = "author")
     private Set<BlogPost> blogPosts;
@@ -51,6 +54,10 @@ public class User extends BaseClass implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private Roles roles;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
+    private List<JwtToken> jtokens;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -66,7 +73,7 @@ public class User extends BaseClass implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
