@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -27,14 +28,17 @@ public class User extends BaseClass implements UserDetails {
 
     private String firstname;
     private String lastname;
-
     private String username;
     private String phoneNumber;
     private String country;
-    private String state;
+    private String bio;
+    private String profilePicture;
     private String email;
     private String password;
     private String confirmPassword;
+
+    private String resetToken;
+    private LocalDateTime TokenCreationDate;
 
     private boolean enabled;
 
@@ -62,7 +66,7 @@ public class User extends BaseClass implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE" + roles.name()));
+        authorities.add(new SimpleGrantedAuthority(roles.name()));
         return authorities;
     }
 

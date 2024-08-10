@@ -24,10 +24,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -47,17 +51,11 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.existsByEmail(authRequest.getEmail())) {
             throw new IllegalStateException("Email already taken");
         }
-
         User user = new User();
-        user.setFirstname(authRequest.getFirstname());
-        user.setLastname(authRequest.getLastname());
         user.setUsername(authRequest.getUsername());
         user.setEmail(authRequest.getEmail());
         user.setPassword(passwordEncoder.encode(authRequest.getPassword()));
-        user.setPhoneNumber(authRequest.getPhoneNumber());
-        user.setCountry(authRequest.getCountry());
-        user.setState(authRequest.getState());
-        user.setRoles(Roles.USERS);
+        user.setRoles(Roles.USER);
 
         User savedUser = userRepository.save(user);
 
@@ -149,5 +147,26 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
+    @Override
+    public String forgotPassword(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        String token = UUID.randomUUID().toString();
+        user.setResetToken(token);
+        user.setTokenCreationDate(LocalDateTime.now());
+        userRepository.save(user);
+
+        // Send email
+        String resetUrl = "http://localhost:5173/reset-password?token=" + token;
+        EmailDetails emailDetails = EmailDetails.builder()
+                            .recipient(user.getEmail())
+                                    .subject("FORGET PASSWORD")
+                                            .messageBody(resetUrl).build();
+        emailService.sendEmailAlert(emailDetails);
+        return "A reset password link has been sent to your account email address:          " + resetUrl;
+
+    }
 
 }

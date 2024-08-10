@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -33,21 +34,29 @@ public class JwtService {
     }
 
     //generate token. the extraClaim will be the one to pass info like the authorities or any info to store within the token
-    public String generateToken( Map<String, Object> extraClaims, UserDetails userDetails){
+    public String generateToken(Map<String, Object> extractClaims, UserDetails userDetails){
+        extractClaims.put("roles", userDetails.getAuthorities().stream()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .collect(Collectors.toList()));
+
         return Jwts
                 .builder()
-                .setClaims(extraClaims)
+                .setClaims(extractClaims)
                 .setSubject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000*60*24))
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() +
+                        1000 * 60 * 60 * 24
+                ))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
+
     // to validate a token if it belongs to a user
     public boolean isTokenValid (String token, UserDetails userDetails){
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
+
 
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());

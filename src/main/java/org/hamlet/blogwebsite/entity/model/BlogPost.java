@@ -1,10 +1,7 @@
 package org.hamlet.blogwebsite.entity.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Set;
 
@@ -13,6 +10,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "blog_post_tbl")
 
 public class BlogPost extends BaseClass{
@@ -21,7 +19,7 @@ public class BlogPost extends BaseClass{
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "user_id")
     private User author;
 
     @OneToMany(mappedBy = "blogPost")
