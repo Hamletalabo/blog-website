@@ -28,7 +28,6 @@ public class BlogController {
 
     @DeleteMapping("/delete-post/{postId}")
     public ResponseEntity<ApiResponse> deletePost(@PathVariable Long postId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         ApiResponse response = blogService.deletePost(postId);
         return ResponseEntity.ok(response);
     }
@@ -43,7 +42,13 @@ public class BlogController {
     public ResponseEntity<List<BlogPostResponse>> getPostsByAuthor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        List<BlogPostResponse> response = blogService.findByAuthor(currentUsername);
+        List<BlogPostResponse> response = blogService.getAuthorPost(currentUsername);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/api/v1/search-posts")
+    public ResponseEntity<List<BlogPostResponse>> filterPosts(@RequestParam String keyword){
+        List<BlogPostResponse> responses = blogService.filterPostsByAuthorOrContent(keyword);
+        return ResponseEntity.ok(responses);
     }
 }

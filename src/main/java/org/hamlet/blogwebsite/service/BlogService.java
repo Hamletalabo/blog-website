@@ -12,7 +12,9 @@ public interface BlogService {
 
     List<BlogPostResponse> getAllPosts();
 
-    List<BlogPostResponse> findByAuthor(String username);
+    List<BlogPostResponse> getAuthorPost(String username);
+
+    List<BlogPostResponse> filterPostsByAuthorOrContent(String keyword);
 
     ApiResponse deletePost(Long postId);
 

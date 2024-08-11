@@ -59,7 +59,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<BlogPostResponse> findByAuthor(String username) {
+    public List<BlogPostResponse> getAuthorPost(String username) {
         User author = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -74,6 +74,24 @@ public class BlogServiceImpl implements BlogService {
                         .build())
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<BlogPostResponse> filterPostsByAuthorOrContent(String keyword) {
+        List<BlogPost> blogPosts = blogPostRepository
+                .searchByKeyword(
+                        keyword
+                );
+
+        return blogPosts.stream().map(post -> BlogPostResponse.builder()
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .createdAt(post.getCreatedAt())
+                        .authorName(post.getAuthor().getFirstname() + " " + post.getAuthor().getLastname())
+                        .authorProfilePictureUrl(post.getAuthor().getProfilePicture())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public ApiResponse deletePost(Long postId) {
