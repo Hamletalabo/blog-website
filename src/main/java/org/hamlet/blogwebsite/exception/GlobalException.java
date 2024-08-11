@@ -35,4 +35,10 @@ public class GlobalException {
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+    @ExceptionHandler(DoesNotExistException.class)
+    public ResponseEntity<String> handleTicketDoesNotExistException(DoesNotExistException ex){
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 }

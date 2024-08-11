@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class BlogPostResponse {
     private String title;
+    private String content;
     private LocalDateTime createdAt;
     private String authorName;
     private String authorProfilePictureUrl;

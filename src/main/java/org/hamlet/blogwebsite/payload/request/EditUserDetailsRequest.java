@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class EditProfileRequest {
+public class EditUserDetailsRequest {
     private String firstname;
     private String lastname;
     private String phoneNumber;

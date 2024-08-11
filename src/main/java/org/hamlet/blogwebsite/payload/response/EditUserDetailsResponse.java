@@ -9,8 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ApiResponse {
-    private String responseCode;
+public class EditUserDetailsResponse {
 
-    private String responseMessage;
+        private String firstname;
+        private String lastname;
+        private String phoneNumber;
+        private String country;
+        private String bio;
+
 }
