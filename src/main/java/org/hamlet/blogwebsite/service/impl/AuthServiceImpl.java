@@ -169,4 +169,24 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
+    @Override
+    public String newResetPassword(String token, String newPassword) {
+
+        User user = userRepository.findByResetToken(token).orElseThrow(()-> new CustomException("Invalid token"));
+        if (isTokenExpired(user.getTokenCreationDate())){
+            throw new CustomException("Token has expired");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setResetToken(null);
+        user.setTokenCreationDate(null);
+        userRepository.save(user);
+
+
+        return "Password reset successfully";
+    }
+
+    private boolean isTokenExpired(LocalDateTime tokenCreationDate) {
+        // Assume token is valid for 24 hour
+        return tokenCreationDate.plusHours(24).isBefore(LocalDateTime.now());
+    }
 }

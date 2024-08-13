@@ -1,21 +1,19 @@
 package org.hamlet.blogwebsite.entity.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 @Table(name = "comment_tbl")
 public class BlogComment extends BaseClass {
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String content;
+    @Column(name = "content", nullable = false)
+    private String comment;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -24,4 +22,8 @@ public class BlogComment extends BaseClass {
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
     private BlogPost blogPost;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_comment_id")
+    private BlogComment parentComment;
 }

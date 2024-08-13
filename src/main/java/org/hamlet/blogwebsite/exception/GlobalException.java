@@ -26,8 +26,6 @@ public class GlobalException {
 
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<String> customException(CustomException ex){
-        // Returns a ResponseEntity with a status of 404 Not Found
-        // and the exception message as the response body.
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
@@ -39,6 +37,10 @@ public class GlobalException {
     @ExceptionHandler(DoesNotExistException.class)
     public ResponseEntity<String> handleTicketDoesNotExistException(DoesNotExistException ex){
 
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<String> handlesUnauthorizedException(UnauthorizedException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }

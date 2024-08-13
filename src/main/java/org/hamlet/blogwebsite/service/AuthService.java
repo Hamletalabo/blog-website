@@ -14,4 +14,6 @@ public interface AuthService {
 
     String forgotPassword(String email);
 
+    String newResetPassword(String token, String newPassword);
+
 }

@@ -5,14 +5,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ApiResponse {
-    private String responseCode;
-
-    private String responseMessage;
+public class CommentResponse {
 
     private ApiResponse apiResponse;
+
+    private String blogTitle;
+
+    private String comment;
+
+    private String commenter;
+
+    private LocalDateTime createdAt;
+
+    private long replyCount;
 }

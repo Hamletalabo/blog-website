@@ -44,4 +44,21 @@ public class AuthController {
 
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        String responseMessage = authService.forgotPassword(email);
+        return ResponseEntity.ok(responseMessage);
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestParam("token") String token,
+                                           @RequestParam("newPassword") String newPassword) {
+        String result = authService.newResetPassword(token, newPassword);
+        if ("Password reset successfully".equals(result)) {
+            return ResponseEntity.ok(Collections.singletonMap("message", result));
+        } else {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", result));
+        }
+    }
+
 }
