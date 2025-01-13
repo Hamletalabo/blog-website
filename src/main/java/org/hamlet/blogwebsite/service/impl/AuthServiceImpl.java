@@ -77,6 +77,7 @@ public class AuthServiceImpl implements AuthService {
                 .messageBody("Congratulations! You account has been successfully created \n "
                         + user.getEmail() + "\n" + user.getFirstname() + "\n" + user.getLastname())
                 .build();
+
         emailService.sendSimpleMailMessage(emailDetails,savedUser.getFirstname(),savedUser.getLastname(),confirmationUrl);
 
         return AuthResponse.builder()

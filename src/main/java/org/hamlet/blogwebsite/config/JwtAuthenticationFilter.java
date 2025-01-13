@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.hamlet.blogwebsite.exception.ExpiredJwtTokenException;
 import org.hamlet.blogwebsite.repository.JwtTokenRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
     private final JwtTokenRepository jTokenRepository;
+    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -44,9 +47,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             // extract token from authHeader
             jwt = authHeader.substring(7);
+            logger.info("Processing JWT: {}", jwt);
             // extract the username from the jwt service
 
             username = jwtService.extractUsername(jwt);
+            logger.info("Extracted username from JWT: {}", username);
 
             if (username != null &&
                     SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -64,13 +69,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     authenticationToken.setDetails(
                             new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                }else {
+                    logger.warn("JWT token is invalid or revoked for user: {}", username);
                 }
 
             }
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtTokenException e) {
+            logger.error("JWT token expired", e);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token expired");
         } catch (IOException | ServletException e) {
+            logger.error("JWT token is not valid", e);
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "JWT token is not valid");
         }
     }

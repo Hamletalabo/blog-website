@@ -18,7 +18,8 @@ import java.util.stream.Collectors;
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY= "7ireV4hAr6N78d86iHgm1rDPXkD4odQY9+Z2ytWNu3aOiswdPjFxvFFO+7mGw3FhKK/P7XV2WeRzGRP1Wa58dQ==";
+    private static final String SECRET_KEY= "XC5+w+IPqkLyUQfLrl1hRvqfbklL98TbnhmvIyTaxJSZpzrfxQQiLsdA5Q62+E8T\n" +
+            "L8zduk1goWnOav542wEuFg==";
 
     public String extractUsername(String token){
         return extractClaim(token, Claims::getSubject);

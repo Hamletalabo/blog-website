@@ -32,10 +32,7 @@ public interface BlogService {
 
     int countComments(Long blogPostId);
 
-
-    ApiResponse likePost(Long blogPostId, String username);
-
-    ApiResponse unlikePost(Long blogPostId, String username);
+    ApiResponse toggleLikePost(Long blogPostId, String username);
 
     int countLikes(Long blogPostId);
 

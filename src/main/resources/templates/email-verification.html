@@ -1,3 +1,93 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org" lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Email Verification</title>-->
+<!--    <style>-->
+<!--        /* Reset CSS */-->
+<!--        body, h1, p {-->
+<!--            margin: 0;-->
+<!--            padding: 0;-->
+<!--        }-->
+
+<!--        body {-->
+<!--            font-family: Arial, sans-serif;-->
+<!--            line-height: 1.6;-->
+<!--        }-->
+
+<!--        /* Email wrapper */-->
+<!--        .email-wrapper {-->
+<!--            max-width: 600px;-->
+<!--            margin: 0 auto;-->
+<!--            padding: 20px;-->
+<!--        }-->
+
+<!--        /* Header */-->
+<!--        .header {-->
+<!--            background-color: #007bff;-->
+<!--            color: white;-->
+<!--            text-align: center;-->
+<!--            padding: 20px 0;-->
+<!--        }-->
+
+<!--        /* Content */-->
+<!--        .content {-->
+<!--            padding: 20px;-->
+<!--            background-color: #f9f9f9;-->
+<!--            border-radius: 8px;-->
+<!--        }-->
+
+<!--        /* Button */-->
+<!--        .btn {-->
+<!--            display: inline-block;-->
+<!--            background-color: #d0dbe7;-->
+<!--            color: black;-->
+<!--            text-decoration: none;-->
+<!--            padding: 10px 20px;-->
+<!--            border-radius: 5px;-->
+<!--            margin-top: 20px;-->
+<!--            margin-bottom: 20px;-->
+<!--        }-->
+
+<!--        /* Footer */-->
+<!--        .footer {-->
+<!--            text-align: center;-->
+<!--            margin-top: 20px;-->
+<!--            font-size: 12px;-->
+<!--            color: #666;-->
+<!--        }-->
+
+<!--        /* Media Queries */-->
+<!--        @media screen and (max-width: 600px) {-->
+<!--            .email-wrapper {-->
+<!--                width: 100%;-->
+<!--            }-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="email-wrapper">-->
+<!--    &lt;!&ndash; Header &ndash;&gt;-->
+<!--    <div class="header">-->
+<!--        <h1>Email Verification</h1>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Content &ndash;&gt;-->
+<!--    <div class="content">-->
+<!--        <p>Hello <th:block th:text="${name}"></th:block></p>-->
+<!--        <p>Thanks for registering on our blog! Please confirm your email by clicking the link below: </p>-->
+<!--        <a th:href="${link}" class="btn">Verify Email</a>-->
+<!--        <p>If you did not create an account, please ignore this email.</p>-->
+<!--    </div>-->
+
+<!--    &lt;!&ndash; Footer &ndash;&gt;-->
+<!--    <div class="footer">-->
+<!--        <p>This email was sent from &copy;<b>Hamlet's Blog</b>.</p>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
@@ -14,6 +104,8 @@
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
+            background-color: #f2f2f2;
+            padding: 20px;
         }
 
         /* Email wrapper */
@@ -21,41 +113,45 @@
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
 
         /* Header */
         .header {
-            background-color: #007bff;
-            color: white;
+            background-color: #6A0DAD;
+            color: #FFFFFF;
             text-align: center;
             padding: 20px 0;
+            border-radius: 8px 8px 0 0;
         }
 
         /* Content */
         .content {
             padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
+            background-color: #FFFFFF;
+            border-radius: 0 0 8px 8px;
         }
 
         /* Button */
         .btn {
             display: inline-block;
-            background-color: #d0dbe7;
-            color: black;
+            background-color: #6A0DAD;
+            color: #FFFFFF;
             text-decoration: none;
             padding: 10px 20px;
             border-radius: 5px;
             margin-top: 20px;
             margin-bottom: 20px;
+            text-align: center;
         }
 
         /* Footer */
         .footer {
-            text-align: center;
+            text-align: left;
             margin-top: 20px;
             font-size: 12px;
-            color: #666;
         }
 
         /* Media Queries */
@@ -70,20 +166,20 @@
 <div class="email-wrapper">
     <!-- Header -->
     <div class="header">
-        <h1>Email Verification</h1>
+        <h1>Please Verify Your Email</h1>
     </div>
 
     <!-- Content -->
     <div class="content">
-        <p>Hello <th:block th:text="${name}"></th:block></p>
-        <p>Thanks for registering on our blog! Please confirm your email by clicking the link below: </p>
-        <a th:href="${link}" class="btn">Verify Email</a>
-        <p>If you did not create an account, please ignore this email.</p>
+        <p>Hi, <th:block th:text="${name}"></th:block></p>
+        <p>Welcome to Qlock-in! To complete your registration, please verify your email by clicking the button below: </p>
+        <a href="${link}" class="btn">Verify Email</a>
+        <p>If you did not create an account, you can safely ignore this mail.</p>
     </div>
 
     <!-- Footer -->
     <div class="footer">
-        <p>This email was sent from &copy;<b>Hamlet's Blog</b>.</p>
+        <p>Thank you,<br> &copy;<b>Blog Team</b>.</p>
     </div>
 </div>
 </body>

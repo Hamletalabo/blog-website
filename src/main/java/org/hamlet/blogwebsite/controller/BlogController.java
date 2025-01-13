@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/blog")
+@RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 public class BlogController {
     private final BlogService blogService;
@@ -55,7 +55,7 @@ public class BlogController {
         return ResponseEntity.ok(responses);
     }
 
-    @PostMapping("/posts/{postId}/create-comment")
+    @PostMapping("//{postId}/create-comment")
     public ResponseEntity<CommentResponse> createComment(@PathVariable Long postId, @RequestBody CommentRequest commentRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
@@ -72,7 +72,7 @@ public class BlogController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/posts/{postId}/getAllComments")
+    @GetMapping("/{postId}/getAllComments")
     public ResponseEntity<List<CommentResponse>> getAllComments(@PathVariable Long postId) {
         List<CommentResponse> responses = blogService.getAllComments(postId);
         return new ResponseEntity<>(responses, HttpStatus.OK);
@@ -96,39 +96,30 @@ public class BlogController {
 
 
     // Endpoint for counting comments including replies
-    @GetMapping("/posts/{postId}/comments/count-all-comments")
+    @GetMapping("/{postId}/comments/count-all-comments")
     public ResponseEntity<Integer> countCommentsIncludingReplies(@PathVariable Long postId) {
         int count = blogService.countComments(postId);
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
     // Endpoint for liking a post
-    @PostMapping("/posts/{postId}/like-post")
+    @PostMapping("/{postId}/like-&-unlike-post")
     public ResponseEntity<ApiResponse> likePost(@RequestParam Long postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUsername = authentication.getName();
-        ApiResponse response = blogService.likePost(postId, currentUsername);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    // Endpoint for unliking a post
-    @PostMapping("/posts/{postId}/unlike-post")
-    public ResponseEntity<ApiResponse> unlikePost(@PathVariable Long postId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUsername = authentication.getName();
-        ApiResponse response = blogService.unlikePost(postId, currentUsername);
+        ApiResponse response = blogService.toggleLikePost(postId, currentUsername);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // Endpoint for counting likes on a post
-    @GetMapping("/posts/{postId}/likes/likes-count")
+    @GetMapping("/{postId}/likes/likes-count")
     public ResponseEntity<Integer> countLikes(@PathVariable Long postId) {
         int count = blogService.countLikes(postId);
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
 
     // Endpoint to get comments with their respective reply counts
-    @GetMapping("/posts/{postId}/comments-replies")
+    @GetMapping("/{postId}/comments-replies")
     public ResponseEntity<List<CommentResponse>> getCommentsWithReplyCount(@PathVariable Long postId) {
         List<CommentResponse> comments = blogService.getCommentsWithReplyCount(postId);
         return new ResponseEntity<>(comments, HttpStatus.OK);

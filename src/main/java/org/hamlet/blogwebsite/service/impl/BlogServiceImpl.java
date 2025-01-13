@@ -45,7 +45,7 @@ public class BlogServiceImpl implements BlogService {
         return BlogPostResponse.builder()
                 .title(blogPost.getTitle())
                 .createdAt(blogPost.getCreatedAt())
-                .authorName(author.getUsername()+ " " + author.getLastname())
+                .authorName(author.getFirstname()+ " " + author.getLastname())
                 .authorProfilePictureUrl(author.getProfilePicture())
                 .build();
     }
@@ -257,7 +257,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public ApiResponse likePost(Long blogPostId, String username) {
+    public ApiResponse toggleLikePost(Long blogPostId, String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
@@ -265,36 +265,20 @@ public class BlogServiceImpl implements BlogService {
                 .orElseThrow(() -> new DoesNotExistException("Post not found"));
 
         if (post.getLikedBy().contains(user)) {
-            throw new IllegalStateException("User has already liked this post");
+            post.getLikedBy().remove(user);
+            blogPostRepository.save(post);
+            return ApiResponse.builder()
+                    .responseCode("200")
+                    .responseMessage("Post unliked successfully")
+                    .build();
+        } else {
+            post.getLikedBy().add(user);
+            blogPostRepository.save(post);
+            return ApiResponse.builder()
+                    .responseCode("200")
+                    .responseMessage("Post liked successfully")
+                    .build();
         }
-        post.getLikedBy().add(user);
-        blogPostRepository.save(post);
-
-        return ApiResponse.builder()
-                .responseCode("200")
-                .responseMessage("Post liked successfully")
-                .build();
-    }
-
-    @Override
-    public ApiResponse unlikePost(Long blogPostId, String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        BlogPost post = blogPostRepository.findById(blogPostId)
-                .orElseThrow(() -> new DoesNotExistException("Post not found"));
-
-        if (!post.getLikedBy().contains(user)) {
-            throw new IllegalStateException("User has not liked this post");
-        }
-
-        post.getLikedBy().remove(user);
-        blogPostRepository.save(post);
-
-        return ApiResponse.builder()
-                .responseCode("200")
-                .responseMessage("Post unliked successfully")
-                .build();
     }
 
     @Override
